@@ -1,26 +1,8 @@
 FROM python:3.10-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libboost-system-dev \
-    libboost-python-dev \
-    libssl-dev \
-    python3-dev \
-    libtorrent-rasterbar-dev \
-    && apt-get clean
-
-# Set working directory
 WORKDIR /app
+COPY . /app
 
-# Copy files and install Python packages
-COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
-# Copy app code
-COPY . .
-
-# Expose port for Streamlit
-EXPOSE 8501
-
-# Run the app
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "app/main.py", "--server.port=8080", "--server.enableCORS=false"]
